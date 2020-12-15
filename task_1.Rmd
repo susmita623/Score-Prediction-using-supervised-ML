@@ -1,0 +1,106 @@
+---
+title: "Prediction using Supervised ML"
+author: "Susmita Ghosh"
+date: "15/12/2020"
+output: html_document
+---
+
+### 1.Predict the percentage of a student based on the no. of study hours.
+
+### 2.What will be predicted score if a student studies for 9.25 hrs/ day?
+
+**Here we use Simple Linear regression to predict the percentage of an student based on the no.of study hours.**
+
+**Percentage of a student is our study or dependent variable and no of study hours is independent variable.**
+
+**Let's load the data first.**
+
+```{r}
+url<- "http://bit.ly/w-data"
+data<- read.csv(url)
+head(data)
+```
+
+**Data description and summary:**
+```{r}
+str(data)
+summary(data)
+```
+
+**To visualize the data we do a Scatter plot between No of study hours and Percentage of a student.**
+
+#### Scatter plot 
+```{r}
+plot(data,xlab="Hours",ylab="Scores",main= "Scatter plot of Hours vs Scores",col= "red")
+```
+
+**The scatter plot shows that there is a positive linear relationship between Percentage of a student and hours of study.**
+
+
+**Let's look at the correaltion coefficent between these two variable:**
+```{r}
+cor(data$Hours,data$Scores)
+```
+
+**Now we are going to fit the linear model.**
+
+
+#### The simple linear regression equation is given by: y=a+b*x;where,
+
+
+*y= Dependent Variable*
+
+*x= Independent Variable*
+
+*a= Intercept*
+
+*b= Slope*
+
+#### Fit the linear model
+```{r}
+x=data$Hours
+y=data$Scores
+model<- lm(y~x,data)
+summary(model)
+```
+### Add Regression line to the Scatter Plot
+```{r}
+x=data$Hours
+y=data$Scores
+model<- lm(y~x,data)
+plot(data,xlab="Hours",ylab="Scores",main= "Scatter plot of Hours vs Scores",col= "red")
+abline(model, col="blue")
+```
+
+### Predicted values based on the fitted model
+```{r}
+scores_predicted= model$fitted.values
+scores_predicted
+```
+
+### Data set containing original scores and predicted scores
+```{r}
+new_data= data.frame(data$Hours,data$Scores,scores_predicted)
+head(new_data)
+```
+
+### Plot predicted score vs original scores
+```{r}
+plot(new_data$data.Scores,new_data$scores_predicted)
+```
+
+### Scores of a student who studied 9.25hrs/day
+```{r}
+new_x=data.frame(x=9.25)
+predict(model, new_x)
+```
+
+#### The Simple Linear Regression model for the given data set:y=2.4837+9.7758*x
+
+**Summary of the model:**
+*1.The percentage of a student is 2.4837 when there is study hours is zero.*
+
+*2.By the unit change in the study hours the percentage of a student increases by 9.7758 unit.*
+
+*3. By the Adj R squared value we see that 95.09% of the variance found in the study variable(scores) can be explained by predictor variable(study hours).*
+
